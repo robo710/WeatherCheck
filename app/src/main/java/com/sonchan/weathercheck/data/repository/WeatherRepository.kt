@@ -12,8 +12,8 @@ class WeatherRepository @Inject constructor(
         dataType: String,
         numOfRows: Int = 1000,
         pageNo: Int = 1,
-        baseDate: String,
-        baseTime: String,
+        baseDate: Int,
+        baseTime: Int,
         nx: Int,
         ny: Int
     ): WeatherResponse {
