@@ -1,6 +1,7 @@
 package com.sonchan.weathercheck.data.di
 
 import com.sonchan.weathercheck.data.remote.api.WeatherApi
+import com.sonchan.weathercheck.data.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,5 +27,13 @@ object NetworkModule {
     @Singleton
     fun provideWeatherApi(retrofit: Retrofit): WeatherApi {
         return retrofit.create(WeatherApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWeatherRepository(
+        api: WeatherApi
+    ): WeatherRepository{
+        return WeatherRepository(api)
     }
 }
