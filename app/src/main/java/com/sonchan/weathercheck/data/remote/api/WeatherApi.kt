@@ -1,12 +1,12 @@
 package com.sonchan.weathercheck.data.remote.api
 
-import okhttp3.Response
+import com.sonchan.weathercheck.data.remote.model.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WeatherApi {
     @GET("getVilageFcst")
-    suspend fun getForecast(
+    suspend fun getWeatherForecast(
         @Query("serviceKey") serviceKey: String,
         @Query("dataType") dataType: String = "JSON",
         @Query("numOfRows") numOfRows: Int,
@@ -15,5 +15,5 @@ interface WeatherApi {
         @Query("base_time") baseTime: String,
         @Query("nx") nx: Int,
         @Query("ny") ny: Int
-    ): Response
+    ): WeatherResponse
 }
