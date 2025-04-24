@@ -66,13 +66,13 @@ dependencies {
     kapt(libs.androidx.hilt.compiler)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation(libs.retrofit)
     // Gson Converter
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.converter.gson)
     // Coroutine Support (옵션)
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation(libs.converter.scalars)
 
     // OkHttp Logging Interceptor (디버깅용)
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation(libs.logging.interceptor)
 
 }
