@@ -64,4 +64,15 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
     kapt(libs.androidx.hilt.compiler)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    // Gson Converter
+    implementation(libs.converter.gson)
+    // Coroutine Support (옵션)
+    implementation(libs.converter.scalars)
+
+    // OkHttp Logging Interceptor (디버깅용)
+    implementation(libs.logging.interceptor)
+
 }
