@@ -4,7 +4,7 @@ import com.sonchan.weathercheck.data.remote.api.WeatherApi
 import com.sonchan.weathercheck.data.remote.model.WeatherResponse
 import javax.inject.Inject
 
-class WeatherRepository @Inject constructor(
+class WeatherRepositoryImpl @Inject constructor(
     private val apiService: WeatherApi
 ){
     suspend fun getWeatherForecast(
