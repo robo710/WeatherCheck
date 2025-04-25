@@ -1,4 +1,4 @@
-package com.sonchan.weathercheck.presentation.component
+package com.sonchan.weathercheck.presentation.component.preview
 
 import androidx.compose.ui.tooling.preview.Preview
 
