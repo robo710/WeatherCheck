@@ -1,5 +1,8 @@
 package com.sonchan.weathercheck.data.repository
 
+import android.Manifest
+import androidx.core.content.ContextCompat
+import android.content.pm.PackageManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -31,8 +34,12 @@ class NotificationRepositoryImpl @Inject constructor(
             .setContentText("Your Notification Content")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        with(NotificationManagerCompat.from(context)) {
-            notify(1, builder.build())
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            with(NotificationManagerCompat.from(context)) {
+                notify(1, builder.build())
+            }
         }
     }
 }
