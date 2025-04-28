@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
     private val apiService: WeatherApi
-): WeatherRepository{
+): WeatherRepository {
     override suspend fun getTodayWeatherInfo(
         baseDate: String,
         baseTime: String,
@@ -27,16 +27,21 @@ class WeatherRepositoryImpl @Inject constructor(
             val items = response.response.body.items.item
 
             val temps = items.filter { it.category == "TMP" }
-                .map { it.fcstValue.toInt() }
+                .map { it.fcstValue.toFloat().toInt() }
+            val maxTemp = items.firstOrNull { it.category == "TMX" }?.fcstValue?.toFloat()?.toInt() ?: 0
+            val minTemp = items.firstOrNull { it.category == "TMN" }?.fcstValue?.toFloat()?.toInt() ?: 0
+            Log.d("로그", "maxTemp: $maxTemp")
+            Log.d("로그", "minTemp: $minTemp")
 
+            // "POP" 카테고리에서 강수 확률 추출
             val precipitation = items.firstOrNull { it.category == "POP" }?.fcstValue?.toInt() ?: 0
 
             return WeatherInfo(
-                maxTemp = temps.maxOrNull() ?: 0,
-                minTemp = temps.minOrNull() ?: 0,
+                maxTemp = maxTemp,
+                minTemp = minTemp,
                 precipitation = precipitation
             )
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Log.e("로그", "API 호출 실패: ${e.message}", e)
             return WeatherInfo(
                 maxTemp = 0,
