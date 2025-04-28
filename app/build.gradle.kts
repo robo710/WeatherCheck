@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,6 +21,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField(
+            type = "String",
+            name = "WEATHER_API_KEY",
+            value = getApiKey("WEATHER_API_KEY")
+        )
     }
 
     buildTypes {
@@ -38,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -75,4 +84,12 @@ dependencies {
     // OkHttp Logging Interceptor (디버깅용)
     implementation(libs.logging.interceptor)
 
+}
+
+fun getApiKey(propertyKey: String): String {
+    val propFile = rootProject.file("./local.properties")
+    val properties = Properties()
+    properties.load(FileInputStream(propFile))
+    return properties.getProperty(propertyKey)
+        ?: throw IllegalArgumentException("Property $propertyKey not found in local.properties")
 }
