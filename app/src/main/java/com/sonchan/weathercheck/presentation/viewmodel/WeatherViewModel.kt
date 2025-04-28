@@ -18,6 +18,15 @@ class WeatherViewModel @Inject constructor(
 
     val weatherInfo: StateFlow<WeatherInfo?> = _weatherInfo
 
+    init {
+        getWeatherInfo(
+            baseDate = "20250428", // 오늘 날짜 적어주기
+            baseTime = "0200",      // 02시 기준
+            nx = 60,                // 대충 서울 어딘가
+            ny = 127
+        )
+    }
+
     fun getWeatherInfo(
         baseDate: String,
         baseTime: String,
@@ -26,10 +35,10 @@ class WeatherViewModel @Inject constructor(
         ){
         viewModelScope.launch {
             val result = getTodayWeatherUseCase(
-                baseDate = baseDate,
-                baseTime = baseTime,
-                nx = nx,
-                ny = ny,
+                baseDate = baseDate, // 오늘 날짜 적어주기
+                baseTime = baseTime,      // 02시 기준
+                nx = nx,                // 대충 서울 어딘가
+                ny = ny
             )
             _weatherInfo.value= result
         }

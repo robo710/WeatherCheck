@@ -2,6 +2,7 @@ package com.sonchan.weathercheck.data.di
 
 import com.sonchan.weathercheck.data.remote.api.WeatherApi
 import com.sonchan.weathercheck.data.repository.WeatherRepositoryImpl
+import com.sonchan.weathercheck.domain.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,9 +32,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideWeatherRepository(
-        api: WeatherApi
-    ): WeatherRepositoryImpl{
+    fun provideWeatherRepository(api: WeatherApi): WeatherRepository{
         return WeatherRepositoryImpl(api)
     }
 }
