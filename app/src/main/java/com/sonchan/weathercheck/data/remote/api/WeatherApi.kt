@@ -9,8 +9,8 @@ interface WeatherApi {
     @GET("getVilageFcst")
     suspend fun getWeatherForecast(
         @Query("serviceKey") serviceKey: String = BuildConfig.WEATHER_API_KEY,
-        @Query("numOfRows") numOfRows: Int,
-        @Query("pageNo") pageNo: Int,
+        @Query("numOfRows") numOfRows: Int = 254,
+        @Query("pageNo") pageNo: Int = 1,
         @Query("dataType") dataType: String = "JSON",
         @Query("base_time") baseTime: String,
         @Query("base_date") baseDate: String,

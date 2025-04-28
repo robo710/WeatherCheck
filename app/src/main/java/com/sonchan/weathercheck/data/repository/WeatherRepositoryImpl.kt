@@ -19,8 +19,6 @@ class WeatherRepositoryImpl @Inject constructor(
     ): WeatherInfo {
         try {
             val response = apiService.getWeatherForecast(
-                numOfRows = 1000,
-                pageNo = 1,
                 baseDate = baseDate,
                 baseTime = baseTime,
                 nx = nx,
