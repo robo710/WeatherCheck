@@ -18,9 +18,29 @@ class WeatherViewModel @Inject constructor(
 
     val weatherInfo: StateFlow<WeatherInfo?> = _weatherInfo
 
-    fun getWeatherInfo(){
+    init {
+        getWeatherInfo(
+            baseDate = "20250428",
+            baseTime = "0200",
+            nx = 60,
+            ny = 127
+        )
+    }
+
+    fun getWeatherInfo(
+        baseDate: String,
+        baseTime: String,
+        nx: Int,
+        ny: Int,
+        ){
         viewModelScope.launch {
-            _weatherInfo.value = getTodayWeatherUseCase()
+            val result = getTodayWeatherUseCase(
+                baseDate = baseDate,
+                baseTime = baseTime,
+                nx = nx,
+                ny = ny
+            )
+            _weatherInfo.value= result
         }
     }
 }

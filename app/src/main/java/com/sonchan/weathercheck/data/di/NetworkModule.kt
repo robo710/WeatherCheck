@@ -2,10 +2,13 @@ package com.sonchan.weathercheck.data.di
 
 import com.sonchan.weathercheck.data.remote.api.WeatherApi
 import com.sonchan.weathercheck.data.repository.WeatherRepositoryImpl
+import com.sonchan.weathercheck.domain.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -17,10 +20,19 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
+        val logging = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+        val client = OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .build()
+
+        val retrofit = Retrofit.Builder()
             .baseUrl("https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client) // 추가!!
             .build()
+        return retrofit
     }
 
     @Provides
@@ -31,9 +43,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideWeatherRepository(
-        api: WeatherApi
-    ): WeatherRepositoryImpl{
+    fun provideWeatherRepository(api: WeatherApi): WeatherRepository{
         return WeatherRepositoryImpl(api)
     }
 }
