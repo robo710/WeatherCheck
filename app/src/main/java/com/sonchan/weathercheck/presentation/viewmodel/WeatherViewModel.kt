@@ -1,5 +1,6 @@
 package com.sonchan.weathercheck.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonchan.weathercheck.domain.model.WeatherInfo
@@ -22,8 +23,8 @@ class WeatherViewModel @Inject constructor(
         getWeatherInfo(
             baseDate = "20250428",
             baseTime = "0200",
-            nx = 58,
-            ny = 74
+            nx = 60,
+            ny = 127
         )
     }
 
