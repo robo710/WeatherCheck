@@ -1,9 +1,7 @@
 package com.sonchan.weathercheck.data.repository
 
 import android.util.Log
-import com.sonchan.weathercheck.BuildConfig
 import com.sonchan.weathercheck.data.remote.api.WeatherApi
-import com.sonchan.weathercheck.data.remote.model.WeatherResponse
 import com.sonchan.weathercheck.domain.model.WeatherInfo
 import com.sonchan.weathercheck.domain.repository.WeatherRepository
 import javax.inject.Inject
