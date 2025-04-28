@@ -1,6 +1,5 @@
 package com.sonchan.weathercheck.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonchan.weathercheck.domain.model.WeatherInfo
@@ -21,12 +20,11 @@ class WeatherViewModel @Inject constructor(
 
     init {
         getWeatherInfo(
-            baseDate = "20250428", // 오늘 날짜 적어주기
-            baseTime = "0200",      // 02시 기준
-            nx = 60,                // 대충 서울 어딘가
-            ny = 127
+            baseDate = "20250428",
+            baseTime = "0200",
+            nx = 58,
+            ny = 74
         )
-        Log.d("로그", "_weatehrInfo: ${_weatherInfo.value}")
     }
 
     fun getWeatherInfo(
@@ -37,12 +35,11 @@ class WeatherViewModel @Inject constructor(
         ){
         viewModelScope.launch {
             val result = getTodayWeatherUseCase(
-                baseDate = baseDate, // 오늘 날짜 적어주기
-                baseTime = baseTime,      // 02시 기준
-                nx = nx,                // 대충 서울 어딘가
+                baseDate = baseDate,
+                baseTime = baseTime,
+                nx = nx,
                 ny = ny
             )
-            Log.d("로그", "받아온 result: $result") // 여기 추가
             _weatherInfo.value= result
         }
     }
