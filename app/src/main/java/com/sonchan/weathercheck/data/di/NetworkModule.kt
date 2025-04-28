@@ -1,5 +1,6 @@
 package com.sonchan.weathercheck.data.di
 
+import com.google.gson.GsonBuilder
 import com.sonchan.weathercheck.data.remote.api.WeatherApi
 import com.sonchan.weathercheck.data.repository.WeatherRepositoryImpl
 import com.sonchan.weathercheck.domain.repository.WeatherRepository
@@ -18,9 +19,13 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit {
+        val gson = GsonBuilder()
+            .setLenient()  // Lenient JSON 파싱 허용
+            .create()
+
         return Retrofit.Builder()
             .baseUrl("https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 
