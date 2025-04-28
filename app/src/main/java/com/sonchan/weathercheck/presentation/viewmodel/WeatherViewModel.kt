@@ -20,7 +20,13 @@ class WeatherViewModel @Inject constructor(
 
     fun getWeatherInfo(){
         viewModelScope.launch {
-            _weatherInfo.value = getTodayWeatherUseCase()
+            val result = getTodayWeatherUseCase(
+                baseDate = "20250428",
+                baseTime = "0200",
+                nx = 60,
+                ny = 127,
+            )
+            _weatherInfo.value= result
         }
     }
 }
