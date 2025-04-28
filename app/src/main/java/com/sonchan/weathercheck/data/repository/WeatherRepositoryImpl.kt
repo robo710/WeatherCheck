@@ -9,14 +9,19 @@ import javax.inject.Inject
 class WeatherRepositoryImpl @Inject constructor(
     private val apiService: WeatherApi
 ): WeatherRepository{
-    override suspend fun getTodayWeatherInfo(): WeatherInfo {
+    override suspend fun getTodayWeatherInfo(
+        baseDate: String,
+        baseTime: String,
+        nx: Int,
+        ny: Int
+    ): WeatherInfo {
         val response = apiService.getWeatherForecast(
             numOfRows = 1000,
             pageNo = 1,
-            baseDate = "20250425",
-            baseTime = "0200",
-            nx = 58,
-            ny = 72
+            baseDate = baseDate,
+            baseTime = baseTime,
+            nx = nx,
+            ny = ny
         )
         val items = response.response.body.items.item
 
