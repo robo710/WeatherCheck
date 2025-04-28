@@ -26,6 +26,7 @@ class WeatherViewModel @Inject constructor(
             nx = 60,                // 대충 서울 어딘가
             ny = 127
         )
+        Log.d("로그", "_weatehrInfo: ${_weatherInfo.value}")
     }
 
     fun getWeatherInfo(
@@ -41,6 +42,7 @@ class WeatherViewModel @Inject constructor(
                 nx = nx,                // 대충 서울 어딘가
                 ny = ny
             )
+            Log.d("로그", "받아온 result: $result") // 여기 추가
             _weatherInfo.value= result
         }
     }

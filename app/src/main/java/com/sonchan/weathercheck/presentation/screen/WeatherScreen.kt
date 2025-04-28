@@ -38,9 +38,18 @@ fun WeatherScreen(
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "최고 기온: ${weatherInfo!!.maxTemp}°C")
-                    Text(text = "최저 기온: ${weatherInfo!!.minTemp}°C")
-                    Text(text = "강수 확률: ${weatherInfo!!.precipitation}%")
+                    Text(
+                        text = "최고 기온: ${weatherInfo!!.maxTemp}°C",
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = "최저 기온: ${weatherInfo!!.minTemp}°C",
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = "강수 확률: ${weatherInfo!!.precipitation}%",
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
             } else {
                 CircularProgressIndicator()
