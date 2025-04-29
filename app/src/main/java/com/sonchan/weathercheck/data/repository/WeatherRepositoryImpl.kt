@@ -8,14 +8,15 @@ import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
     private val apiService: WeatherApi
-): WeatherRepository {
+) : WeatherRepository {
+
     override suspend fun getTodayWeatherInfo(
         baseDate: String,
         baseTime: String,
         nx: Int,
         ny: Int
     ): WeatherInfo {
-        try {
+        return try {
             val response = apiService.getWeatherForecast(
                 baseDate = baseDate,
                 baseTime = baseTime,
@@ -25,35 +26,42 @@ class WeatherRepositoryImpl @Inject constructor(
             val items = response.response.body.items.item
 
             val temps = items.filter { it.category == "TMP" }
-                .map { it.fcstValue.toFloat().toInt() }
-            val maxTemp = items.firstOrNull { it.category == "TMX" }?.fcstValue?.toFloat()?.toInt() ?: 0
-            val minTemp = items.firstOrNull { it.category == "TMN" }?.fcstValue?.toFloat()?.toInt() ?: 0
-            Log.d("로그", "maxTemp: $maxTemp")
-            Log.d("로그", "minTemp: $minTemp")
+                .associate { it.fcstTime to it.fcstValue.toInt() }
 
-            // "POP" 카테고리에서 강수 확률 추출
-            val precipitation = items.firstOrNull { it.category == "POP" }?.fcstValue?.toInt() ?: 0
+            val precipitation = items.filter { it.category == "POP" }
+                .associate { it.fcstTime to it.fcstValue.toInt() }
 
-            val skyValue = items.firstOrNull { it.category == "SKY" }?.fcstValue?.toFloat()?.toInt() ?: 0
+            val maxTemp = items.firstOrNull { it.category == "TMX" }
+                ?.fcstValue?.toFloat()?.toInt() ?: 0
+
+            val minTemp = items.firstOrNull { it.category == "TMN" }
+                ?.fcstValue?.toFloat()?.toInt() ?: 0
+
+            val skyValue = items.firstOrNull { it.category == "SKY" }
+                ?.fcstValue?.toInt() ?: 0
+
             val sky = when (skyValue) {
                 1 -> "맑음"
                 3 -> "구름 많음"
                 4 -> "흐림"
-                else -> "Unkown"
+                else -> "Unknown"
             }
 
-            return WeatherInfo(
+            WeatherInfo(
+                temps = temps,
                 maxTemp = maxTemp,
                 minTemp = minTemp,
                 precipitation = precipitation,
                 sky = sky
             )
+
         } catch (e: Exception) {
             Log.e("로그", "API 호출 실패: ${e.message}", e)
-            return WeatherInfo(
+            WeatherInfo(
+                temps = emptyMap(),
                 maxTemp = 0,
                 minTemp = 0,
-                precipitation = 0,
+                precipitation = emptyMap(),
                 sky = ""
             )
         }
