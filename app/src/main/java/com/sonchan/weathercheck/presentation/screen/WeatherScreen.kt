@@ -4,6 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -14,11 +18,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sonchan.weathercheck.R
 import com.sonchan.weathercheck.domain.model.WeatherInfo
 import com.sonchan.weathercheck.presentation.component.preview.DarkThemeDevicePreviews
 import com.sonchan.weathercheck.presentation.component.preview.DevicePreviews
+import com.sonchan.weathercheck.presentation.component.weather.TodayWeatherList
 import com.sonchan.weathercheck.presentation.viewmodel.WeatherViewModel
 import com.sonchan.weathercheck.ui.theme.WeatherCheckTheme
 
@@ -27,7 +33,14 @@ fun WeatherScreenRoute(
     viewModel: WeatherViewModel = hiltViewModel()
 ){
     val weatherInfo by viewModel.weatherInfo.collectAsState()
+    val today by viewModel.today.collectAsState()
     val context = LocalContext.current
+
+    val hourlyWeatherList = weatherInfo?.temps?.get(today)?.mapNotNull { (time, temp) ->
+        val pop = weatherInfo!!.precipitation[today]?.get(time)
+        if (pop != null) Triple(time, temp, pop) else null
+    } ?: emptyList()
+
     WeatherScreen(
         weatherInfo = weatherInfo,
         onNotificationClick = {viewModel.getNotification(
@@ -36,7 +49,7 @@ fun WeatherScreenRoute(
             title = "WeatherCheck",
             text = "최고 기온: ${weatherInfo!!.maxTemp}°C, 최저 기온: ${weatherInfo!!.minTemp}°C}"
         )},
-
+        todayWeatherDataList = hourlyWeatherList
     )
 }
 
@@ -44,7 +57,8 @@ fun WeatherScreenRoute(
 fun WeatherScreen(
     modifier: Modifier = Modifier,
     weatherInfo: WeatherInfo?,
-    onNotificationClick: () -> Unit
+    onNotificationClick: () -> Unit,
+    todayWeatherDataList: List<Triple<String, Int, Int>>
 ){
     Column(
         modifier
@@ -67,13 +81,22 @@ fun WeatherScreen(
                     color = MaterialTheme.colorScheme.primary
                 )
                 Text(
-                    text = "날씨: ${weatherInfo!!.sky}",
+                    text = "오늘의 날씨",
                     color = MaterialTheme.colorScheme.primary
                 )
-                Text(
-                    text = "기온: ${weatherInfo!!.temps}",
-                    color = MaterialTheme.colorScheme.primary
-                )
+                LazyRow(
+                    modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 10.dp)
+                ) {
+                    items(todayWeatherDataList) { (time, temp, pop) ->
+                        TodayWeatherList(
+                            time = time,
+                            temp = temp,
+                            pop = pop
+                        )
+                    }
+                }
             }
         } else {
             CircularProgressIndicator()
@@ -94,7 +117,8 @@ fun WeatherScreenPreview(){
     WeatherCheckTheme {
         WeatherScreen(
             weatherInfo = null,
-            onNotificationClick = {}
+            onNotificationClick = {},
+            todayWeatherDataList = emptyList()
         )
     }
 }
