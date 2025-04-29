@@ -45,15 +45,17 @@ class WeatherRepositoryImpl @Inject constructor(
             val minTemp = items.firstOrNull { it.category == "TMN" }
                 ?.fcstValue?.toFloat()?.toInt() ?: 0
 
-            val skyValue = items.firstOrNull { it.category == "SKY" }
-                ?.fcstValue?.toInt() ?: 0
-
-            val sky = when (skyValue) {
-                1 -> "맑음"
-                3 -> "구름 많음"
-                4 -> "흐림"
-                else -> "Unknown"
-            }
+            val sky = items
+                .filter { it.category == "SKY" }
+                .groupBy { it.fcstDate }
+                .mapValues { entry ->
+                    entry.value.associate { it.fcstTime to when (it.fcstValue.toInt()) {
+                        1 -> "맑음"
+                        3 -> "구름 많음"
+                        4 -> "흐림"
+                        else -> "알 수 없음"
+                    } }
+                }
 
             WeatherInfo(
                 temps = temps,
@@ -70,7 +72,7 @@ class WeatherRepositoryImpl @Inject constructor(
                 maxTemp = 0,
                 minTemp = 0,
                 precipitation = emptyMap(),
-                sky = ""
+                sky = emptyMap(),
             )
         }
     }

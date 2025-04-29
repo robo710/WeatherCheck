@@ -5,5 +5,5 @@ data class WeatherInfo(
     val maxTemp: Int,
     val minTemp: Int,
     val precipitation: Map<String, Map<String, Int>>,
-    val sky: String,
+    val sky: Map<String, Map<String, String>>,
 )
