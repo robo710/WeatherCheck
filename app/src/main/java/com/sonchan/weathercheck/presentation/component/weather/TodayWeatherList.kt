@@ -3,13 +3,16 @@ package com.sonchan.weathercheck.presentation.component.weather
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sonchan.weathercheck.presentation.component.preview.DarkThemeDevicePreviews
 import com.sonchan.weathercheck.presentation.component.preview.DevicePreviews
 import com.sonchan.weathercheck.ui.theme.WeatherCheckTheme
@@ -25,19 +28,23 @@ fun TodayWeatherList(
         modifier
             .clip(RoundedCornerShape(12.dp))
             .background(color = MaterialTheme.colorScheme.onBackground)
-            .padding(10.dp)
+            .padding(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "${time.substring(0,2)}시",
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
+            fontSize = 20.sp
         )
         Text(
-            text = "$temp°C",
-            color = MaterialTheme.colorScheme.primary
+            text = "$temp°",
+            color = MaterialTheme.colorScheme.primary,
+            fontSize = 35.sp
         )
         Text(
             text = "$pop%",
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
+            fontSize = 17.sp
         )
     }
 }
