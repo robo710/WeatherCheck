@@ -25,11 +25,19 @@ class WeatherRepositoryImpl @Inject constructor(
             )
             val items = response.response.body.items.item
 
-            val temps = items.filter { it.category == "TMP" }
-                .associate { it.fcstTime to it.fcstValue.toInt() }
+            val temps = items
+                .filter { it.category == "TMP" }
+                .groupBy { it.fcstDate }
+                .mapValues { entry ->
+                    entry.value.associate { it.fcstTime to it.fcstValue.toInt() }
+                }
 
-            val precipitation = items.filter { it.category == "POP" }
-                .associate { it.fcstTime to it.fcstValue.toInt() }
+            val precipitation = items
+                .filter { it.category == "POP" }
+                .groupBy { it.fcstDate }
+                .mapValues { entry ->
+                    entry.value.associate { it.fcstTime to it.fcstValue.toInt() }
+                }
 
             val maxTemp = items.firstOrNull { it.category == "TMX" }
                 ?.fcstValue?.toFloat()?.toInt() ?: 0
