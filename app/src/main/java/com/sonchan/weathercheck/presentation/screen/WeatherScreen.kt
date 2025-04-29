@@ -16,19 +16,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sonchan.weathercheck.R
+import com.sonchan.weathercheck.domain.model.WeatherInfo
 import com.sonchan.weathercheck.presentation.component.preview.DarkThemeDevicePreviews
 import com.sonchan.weathercheck.presentation.component.preview.DevicePreviews
 import com.sonchan.weathercheck.presentation.viewmodel.WeatherViewModel
 import com.sonchan.weathercheck.ui.theme.WeatherCheckTheme
 
 @Composable
-fun WeatherScreen(
-    modifier: Modifier = Modifier,
+fun WeatherScreenRoute(
     viewModel: WeatherViewModel = hiltViewModel()
 ){
     val weatherInfo by viewModel.weatherInfo.collectAsState()
     val context = LocalContext.current
+    WeatherScreen(
+        weatherInfo = weatherInfo,
+        onNotificationClick = {viewModel.getNotification(
+            context = context,
+            icon = R.drawable.ic_launcher_foreground,
+            title = "WeatherCheck",
+            text = "최고 기온: ${weatherInfo!!.maxTemp}°C, 최저 기온: ${weatherInfo!!.minTemp}°C"
+        )},
 
+    )
+}
+
+@Composable
+fun WeatherScreen(
+    modifier: Modifier = Modifier,
+    weatherInfo: WeatherInfo?,
+    onNotificationClick: () -> Unit
+){
     Column(
         modifier
             .fillMaxSize()
@@ -59,12 +76,7 @@ fun WeatherScreen(
         }
         Button(
             onClick = {
-                viewModel.getNotification(
-                    context = context,
-                    icon = R.drawable.ic_launcher_foreground,
-                    title = "WeatherCheck",
-                    text = "최고 기온: ${weatherInfo!!.maxTemp}°C, 최저 기온: ${weatherInfo!!.minTemp}°C"
-                )
+                onNotificationClick
             }
         ){}
 
@@ -76,6 +88,9 @@ fun WeatherScreen(
 @Composable
 fun WeatherScreenPreview(){
     WeatherCheckTheme {
-        WeatherScreen()
+        WeatherScreen(
+            weatherInfo = null,
+            onNotificationClick = {}
+        )
     }
 }
