@@ -3,6 +3,7 @@ package com.sonchan.weathercheck.presentation.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -86,8 +87,9 @@ fun WeatherScreen(
                 )
                 LazyRow(
                     modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp)
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items(todayWeatherDataList) { (time, temp, pop) ->
                         TodayWeatherList(
