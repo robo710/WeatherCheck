@@ -1,9 +1,11 @@
 package com.sonchan.weathercheck.presentation.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sonchan.weathercheck.domain.model.WeatherInfo
+import com.sonchan.weathercheck.domain.usecase.GetTodayDateUseCase
 import com.sonchan.weathercheck.domain.usecase.GetTodayWeatherUseCase
 import com.sonchan.weathercheck.domain.usecase.NotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,14 +18,18 @@ import javax.inject.Inject
 class WeatherViewModel @Inject constructor(
     private val getTodayWeatherUseCase: GetTodayWeatherUseCase,
     private val notificationUseCase: NotificationUseCase,
+    private val getTodayDateUseCase: GetTodayDateUseCase,
 ): ViewModel(){
     private val _weatherInfo = MutableStateFlow<WeatherInfo?>(null)
+    private val _today = MutableStateFlow<String?>(null)
 
     val weatherInfo: StateFlow<WeatherInfo?> = _weatherInfo
+    val today: StateFlow<String?> = _today
 
     init {
+        _today.value = getTodayDateUseCase()
         getWeatherInfo(
-            baseDate = "20250429",
+            baseDate = _today.value!!,
             baseTime = "0200",
             nx = 60,
             ny = 127
@@ -48,7 +54,8 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun getNotification(context: Context, icon: Int, title: String, text: String){
-        getWeatherInfo(baseDate = "20250429",
+        getWeatherInfo(
+            baseDate = _today.value!!,
             baseTime = "0200",
             nx = 60,
             ny = 127)
