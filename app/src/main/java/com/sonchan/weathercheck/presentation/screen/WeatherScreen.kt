@@ -1,7 +1,7 @@
 package com.sonchan.weathercheck.presentation.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
@@ -32,44 +32,42 @@ fun WeatherScreen(
     Column(
         modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.background),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            if (weatherInfo != null) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "최고 기온: ${weatherInfo!!.maxTemp}°C",
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = "최저 기온: ${weatherInfo!!.minTemp}°C",
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        text = "강수 확률: ${weatherInfo!!.precipitation}%",
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            } else {
-                CircularProgressIndicator()
+        if (weatherInfo != null) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "최고 기온: ${weatherInfo!!.maxTemp}°C",
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "최저 기온: ${weatherInfo!!.minTemp}°C",
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "강수 확률: ${weatherInfo!!.precipitation}%",
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
-            Button(
-                onClick = {
-                    viewModel.getNotification(
-                        context = context,
-                        icon = R.drawable.ic_launcher_foreground,
-                        title = "WeatherCheck",
-                        text = "최고 기온: ${weatherInfo!!.maxTemp}°C, 최저 기온: ${weatherInfo!!.minTemp}°C"
-                    )
-                }
-            ){}
+        } else {
+            CircularProgressIndicator()
         }
+        Button(
+            onClick = {
+                viewModel.getNotification(
+                    context = context,
+                    icon = R.drawable.ic_launcher_foreground,
+                    title = "WeatherCheck",
+                    text = "최고 기온: ${weatherInfo!!.maxTemp}°C, 최저 기온: ${weatherInfo!!.minTemp}°C"
+                )
+            }
+        ){}
+
     }
 }
 
