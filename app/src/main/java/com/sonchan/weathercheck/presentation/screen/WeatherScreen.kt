@@ -70,6 +70,10 @@ fun WeatherScreen(
                     text = "날씨: ${weatherInfo!!.sky}",
                     color = MaterialTheme.colorScheme.primary
                 )
+                Text(
+                    text = "기온: ${weatherInfo!!.temps}",
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         } else {
             CircularProgressIndicator()
