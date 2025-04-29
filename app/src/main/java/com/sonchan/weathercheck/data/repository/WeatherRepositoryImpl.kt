@@ -34,17 +34,27 @@ class WeatherRepositoryImpl @Inject constructor(
             // "POP" 카테고리에서 강수 확률 추출
             val precipitation = items.firstOrNull { it.category == "POP" }?.fcstValue?.toInt() ?: 0
 
+            val skyValue = items.firstOrNull { it.category == "SKY" }?.fcstValue?.toFloat()?.toInt() ?: 0
+            val sky = when (skyValue) {
+                1 -> "맑음"
+                3 -> "구름 많음"
+                4 -> "흐림"
+                else -> "Unkown"
+            }
+
             return WeatherInfo(
                 maxTemp = maxTemp,
                 minTemp = minTemp,
-                precipitation = precipitation
+                precipitation = precipitation,
+                sky = sky
             )
         } catch (e: Exception) {
             Log.e("로그", "API 호출 실패: ${e.message}", e)
             return WeatherInfo(
                 maxTemp = 0,
                 minTemp = 0,
-                precipitation = 0
+                precipitation = 0,
+                sky = ""
             )
         }
     }

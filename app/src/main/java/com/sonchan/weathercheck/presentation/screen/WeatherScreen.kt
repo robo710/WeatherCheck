@@ -34,7 +34,7 @@ fun WeatherScreenRoute(
             context = context,
             icon = R.drawable.ic_launcher_foreground,
             title = "WeatherCheck",
-            text = "최고 기온: ${weatherInfo!!.maxTemp}°C, 최저 기온: ${weatherInfo!!.minTemp}°C"
+            text = "최고 기온: ${weatherInfo!!.maxTemp}°C, 최저 기온: ${weatherInfo!!.minTemp}°C, 날씨: ${weatherInfo!!.sky}"
         )},
 
     )
@@ -67,7 +67,7 @@ fun WeatherScreen(
                     color = MaterialTheme.colorScheme.primary
                 )
                 Text(
-                    text = "강수 확률: ${weatherInfo!!.precipitation}%",
+                    text = "날씨: ${weatherInfo!!.sky}",
                     color = MaterialTheme.colorScheme.primary
                 )
             }
@@ -76,7 +76,7 @@ fun WeatherScreen(
         }
         Button(
             onClick = {
-                onNotificationClick
+                onNotificationClick()
             }
         ){}
 
