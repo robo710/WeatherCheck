@@ -1,6 +1,5 @@
 package com.sonchan.weathercheck.presentation.screen
 
-import android.graphics.drawable.Drawable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
