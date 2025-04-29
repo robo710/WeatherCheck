@@ -7,7 +7,7 @@ import javax.inject.Inject
 class NotificationUseCase @Inject constructor(
     private val repository: NotificationRepository
 ){
-    fun showNotification(context: Context){
-        repository.showNotification(context)
+    fun showNotification(context: Context, icon: Int, title: String, text: String){
+        repository.showNotification(context = context, icon = icon, title = title, text = text)
     }
 }

@@ -47,7 +47,7 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun getNotification(context: Context){
-        notificationUseCase.showNotification(context = context)
+    fun getNotification(context: Context, icon: Int, title: String, text: String){
+        notificationUseCase.showNotification(context = context, icon = icon, title = title, text = text)
     }
 }
