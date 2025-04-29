@@ -65,8 +65,8 @@ fun WeatherScreen(
                     viewModel.getNotification(
                         context = context,
                         icon = R.drawable.ic_launcher_foreground,
-                        title = "테스트",
-                        text = "입니다."
+                        title = "WeatherCheck",
+                        text = "최고 기온: ${weatherInfo!!.maxTemp}°C, 최저 기온: ${weatherInfo!!.minTemp}°C"
                     )
                 }
             ){}

@@ -23,7 +23,7 @@ class WeatherViewModel @Inject constructor(
 
     init {
         getWeatherInfo(
-            baseDate = "20250428",
+            baseDate = "20250429",
             baseTime = "0200",
             nx = 60,
             ny = 127
@@ -48,6 +48,10 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun getNotification(context: Context, icon: Int, title: String, text: String){
+        getWeatherInfo(baseDate = "20250429",
+            baseTime = "0200",
+            nx = 60,
+            ny = 127)
         notificationUseCase.showNotification(context = context, icon = icon, title = title, text = text)
     }
 }
