@@ -1,4 +1,14 @@
 package com.sonchan.weathercheck.domain.usecase
 
-class GetTodayDateUseCase {
+import java.text.SimpleDateFormat
+import javax.inject.Inject
+
+class GetTodayDateUseCase @Inject constructor(
+
+){
+    operator fun invoke(): String{
+        val today = System.currentTimeMillis()
+        val formattedDate = SimpleDateFormat("yyyyMMdd")
+        return formattedDate.toString()
+    }
 }
