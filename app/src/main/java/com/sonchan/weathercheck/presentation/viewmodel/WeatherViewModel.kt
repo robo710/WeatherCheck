@@ -57,11 +57,6 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun getNotification(context: Context, icon: Int, title: String, text: String){
-        getWeatherInfo(
-            baseDate = _today.value!!,
-            baseTime = "0200",
-            nx = 60,
-            ny = 127)
         notificationUseCase.showNotification(context = context, icon = icon, title = title, text = text)
     }
 
