@@ -34,8 +34,8 @@ class WeatherViewModel @Inject constructor(
         getWeatherInfo(
             baseDate = _today.value!!,
             baseTime = "0200",
-            nx = 60,
-            ny = 127
+            nx = 57,
+            ny = 74
         )
     }
 
