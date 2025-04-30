@@ -62,31 +62,37 @@ class WeatherRepositoryImpl @Inject constructor(
                     entry.value.firstOrNull()?.fcstValue?.toFloat()?.toInt() ?: 0
                 }
 
-            val sky = items
-                .filter { it.category == "SKY" }
-                .groupBy { it.fcstDate }
-                .mapValues { entry ->
-                    entry.value.associate {
-                        it.fcstTime to when (it.fcstValue.toInt()) {
-                            1 -> SkyInfo(
-                                description = "맑음",
-                                icon = R.drawable.sunny_icon,
-                            )
-                            3 -> SkyInfo(
-                                description = "구름 많음",
-                                icon = R.drawable.sun_cloud_icon,
-                            )
-                            4 -> SkyInfo(
-                                description = "흐림",
-                                icon = R.drawable.cloud_icon,
-                            )
-                            else ->  SkyInfo(
-                                description = "알수없음",
-                                icon = R.drawable.rainy_icon,
-                            )
+            val skyItems = items.filter { it.category == "SKY" }
+            val ptyItems = items.filter { it.category == "PTY" }
+
+            val skyGrouped = skyItems.groupBy { it.fcstDate }
+            val ptyGrouped = ptyItems.groupBy { it.fcstDate }
+
+            val sky = skyGrouped.mapValues { (date, skyList) ->
+                skyList.associate { skyItem ->
+                    val time = skyItem.fcstTime
+                    val skyValue = skyItem.fcstValue.toInt()
+
+                    val ptyValue = ptyGrouped[date]
+                        ?.firstOrNull { it.fcstTime == time }
+                        ?.fcstValue?.toInt() ?: 0
+
+                    val skyInfo = when (ptyValue) {
+                        1 -> SkyInfo("비", R.drawable.rainy_icon)
+                        2 -> SkyInfo("비/눈", R.drawable.snowy_rainy_icon)
+                        3 -> SkyInfo("눈", R.drawable.snowy_icon)
+                        4 -> SkyInfo("소나기", R.drawable.rainy_icon)
+                        else -> when (skyValue) {
+                            1 -> SkyInfo("맑음", R.drawable.sunny_icon)
+                            3 -> SkyInfo("구름 많음", R.drawable.sun_cloud_icon)
+                            4 -> SkyInfo("흐림", R.drawable.cloud_icon)
+                            else -> SkyInfo("알수없음", R.drawable.sunny_icon)
                         }
                     }
+
+                    time to skyInfo
                 }
+            }
 
             WeatherInfo(
                 temps = temps,
