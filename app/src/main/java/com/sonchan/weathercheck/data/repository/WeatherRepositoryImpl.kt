@@ -41,6 +41,13 @@ class WeatherRepositoryImpl @Inject constructor(
                     entry.value.associate { it.fcstTime to it.fcstValue.toInt() }
                 }
 
+            val humidity = items
+                .filter { it.category == "REH" }
+                .groupBy { it.fcstDate }
+                .mapValues { entry ->
+                    entry.value.associate { it.fcstTime to it.fcstValue.toInt() }
+                }
+
             val maxTemp = items.firstOrNull { it.category == "TMX" }
                 ?.fcstValue?.toFloat()?.toInt() ?: 0
 
@@ -78,7 +85,8 @@ class WeatherRepositoryImpl @Inject constructor(
                 maxTemp = maxTemp,
                 minTemp = minTemp,
                 precipitation = precipitation,
-                sky = sky
+                sky = sky,
+                humidity = humidity
             )
 
         } catch (e: Exception) {
@@ -89,6 +97,7 @@ class WeatherRepositoryImpl @Inject constructor(
                 minTemp = 0,
                 precipitation = emptyMap(),
                 sky = emptyMap(),
+                humidity = emptyMap(),
             )
         }
     }
