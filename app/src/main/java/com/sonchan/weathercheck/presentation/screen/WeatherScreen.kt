@@ -68,41 +68,34 @@ fun WeatherScreen(
         modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
     ) {
-
         if (weatherInfo != null) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+            Text(
+                text = "최고 기온: ${weatherInfo!!.maxTemp}°C",
+                color = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = "최저 기온: ${weatherInfo!!.minTemp}°C",
+                color = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = "오늘의 날씨",
+                color = MaterialTheme.colorScheme.primary
+            )
+            LazyRow(
+                modifier
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text(
-                    text = "최고 기온: ${weatherInfo!!.maxTemp}°C",
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = "최저 기온: ${weatherInfo!!.minTemp}°C",
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = "오늘의 날씨",
-                    color = MaterialTheme.colorScheme.primary
-                )
-                LazyRow(
-                    modifier
-                        .fillMaxWidth(),
-                    contentPadding = PaddingValues(10.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    items(todayWeatherDataList) { item ->
-                        TodayWeatherList(
-                            time = item.time,
-                            temp = item.temp,
-                            pop = item.pop,
-                            skyIcon = item.sky.icon,
-                            skyDescription = item.sky.description,
-                        )
-                    }
+                items(todayWeatherDataList) { item ->
+                    TodayWeatherList(
+                        time = item.time,
+                        temp = item.temp,
+                        pop = item.pop,
+                        skyIcon = item.sky.icon,
+                        skyDescription = item.sky.description,
+                    )
                 }
             }
         } else {
