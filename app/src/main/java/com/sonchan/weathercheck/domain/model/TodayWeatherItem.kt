@@ -4,5 +4,6 @@ data class TodayWeatherItem(
     val time: String,
     val temp: Int,
     val pop: Int,
-    val sky: SkyInfo
+    val sky: SkyInfo,
+    val humidity: Int,
 )

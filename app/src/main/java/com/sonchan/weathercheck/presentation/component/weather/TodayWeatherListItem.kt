@@ -30,6 +30,7 @@ fun TodayWeatherListItem(
     pop: Int,
     skyIcon: Int,
     skyDescription: String,
+    humidity: Int,
 ){
     Column(
         modifier
@@ -62,6 +63,11 @@ fun TodayWeatherListItem(
             color = MaterialTheme.colorScheme.primary,
             fontSize = 12.sp
         )
+        Text(
+            text = "$humidity%",
+            color = MaterialTheme.colorScheme.primary,
+            fontSize = 12.sp
+        )
     }
 }
 
@@ -75,7 +81,8 @@ fun TodayWeatherListItemPreview(){
             temp = 0,
             pop = 0,
             skyIcon = R.drawable.sunny_icon,
-            skyDescription = "맑음"
+            skyDescription = "맑음",
+            humidity = 0
         )
     }
 }

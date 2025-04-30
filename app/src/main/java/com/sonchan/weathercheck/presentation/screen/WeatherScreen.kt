@@ -39,8 +39,9 @@ fun WeatherScreenRoute(
     val hourlyWeatherList = weatherInfo?.temps?.get(today)?.mapNotNull { (time, temp) ->
         val pop = weatherInfo!!.precipitation[today]?.get(time)
         val sky = weatherInfo!!.sky[today]?.get(time)
-        if (pop != null && sky != null) {
-            TodayWeatherItem(time, temp, pop, sky)
+        val humidity = weatherInfo!!.humidity[today]?.get(time)
+        if (pop != null && sky != null && humidity != null) {
+            TodayWeatherItem(time, temp, pop, sky, humidity)
         } else null
     } ?: emptyList()
 
@@ -94,6 +95,7 @@ fun WeatherScreen(
                         pop = item.pop,
                         skyIcon = item.sky.icon,
                         skyDescription = item.sky.description,
+                        humidity = item.humidity
                     )
                 }
             }

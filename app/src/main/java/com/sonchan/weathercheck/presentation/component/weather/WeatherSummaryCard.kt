@@ -15,7 +15,6 @@ fun WeatherSummaryCard(
     maxTemp: Int,
     minTemp: Int,
     humidity: Int,
-
 ){
 
 }
