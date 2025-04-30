@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -25,7 +24,7 @@ import com.sonchan.weathercheck.domain.model.TodayWeatherItem
 import com.sonchan.weathercheck.domain.model.WeatherInfo
 import com.sonchan.weathercheck.presentation.component.preview.DarkThemeDevicePreviews
 import com.sonchan.weathercheck.presentation.component.preview.DevicePreviews
-import com.sonchan.weathercheck.presentation.component.weather.TodayWeatherList
+import com.sonchan.weathercheck.presentation.component.weather.TodayWeatherListItem
 import com.sonchan.weathercheck.presentation.viewmodel.WeatherViewModel
 import com.sonchan.weathercheck.ui.theme.WeatherCheckTheme
 
@@ -89,7 +88,7 @@ fun WeatherScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(todayWeatherDataList) { item ->
-                    TodayWeatherList(
+                    TodayWeatherListItem(
                         time = item.time,
                         temp = item.temp,
                         pop = item.pop,

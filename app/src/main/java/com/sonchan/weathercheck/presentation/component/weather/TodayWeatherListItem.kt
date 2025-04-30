@@ -23,7 +23,7 @@ import com.sonchan.weathercheck.presentation.component.preview.DevicePreviews
 import com.sonchan.weathercheck.ui.theme.WeatherCheckTheme
 
 @Composable
-fun TodayWeatherList(
+fun TodayWeatherListItem(
     modifier: Modifier = Modifier,
     time: String,
     temp: Int,
@@ -68,9 +68,9 @@ fun TodayWeatherList(
 @DevicePreviews
 @DarkThemeDevicePreviews
 @Composable
-fun TodayWeatherListPreview(){
+fun TodayWeatherListItemPreview(){
     WeatherCheckTheme {
-        TodayWeatherList(
+        TodayWeatherListItem(
             time = "0200",
             temp = 0,
             pop = 0,
