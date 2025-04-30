@@ -48,11 +48,19 @@ class WeatherRepositoryImpl @Inject constructor(
                     entry.value.associate { it.fcstTime to it.fcstValue.toInt() }
                 }
 
-            val maxTemp = items.firstOrNull { it.category == "TMX" }
-                ?.fcstValue?.toFloat()?.toInt() ?: 0
+            val maxTemp = items
+                .filter { it.category == "TMX" }
+                .groupBy { it.fcstDate }
+                .mapValues { entry ->
+                    entry.value.firstOrNull()?.fcstValue?.toFloat()?.toInt() ?: 0
+                }
 
-            val minTemp = items.firstOrNull { it.category == "TMN" }
-                ?.fcstValue?.toFloat()?.toInt() ?: 0
+            val minTemp = items
+                .filter { it.category == "TMN" }
+                .groupBy { it.fcstDate }
+                .mapValues { entry ->
+                    entry.value.firstOrNull()?.fcstValue?.toFloat()?.toInt() ?: 0
+                }
 
             val sky = items
                 .filter { it.category == "SKY" }
@@ -93,8 +101,8 @@ class WeatherRepositoryImpl @Inject constructor(
             Log.e("로그", "API 호출 실패: ${e.message}", e)
             WeatherInfo(
                 temps = emptyMap(),
-                maxTemp = 0,
-                minTemp = 0,
+                maxTemp = emptyMap(),
+                minTemp = emptyMap(),
                 precipitation = emptyMap(),
                 sky = emptyMap(),
                 humidity = emptyMap(),

@@ -20,11 +20,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sonchan.weathercheck.R
+import com.sonchan.weathercheck.domain.model.SkyInfo
 import com.sonchan.weathercheck.domain.model.TodayWeatherItem
 import com.sonchan.weathercheck.domain.model.WeatherInfo
 import com.sonchan.weathercheck.presentation.component.preview.DarkThemeDevicePreviews
 import com.sonchan.weathercheck.presentation.component.preview.DevicePreviews
 import com.sonchan.weathercheck.presentation.component.weather.TodayWeatherListItem
+import com.sonchan.weathercheck.presentation.component.weather.WeatherSummaryCard
 import com.sonchan.weathercheck.presentation.viewmodel.WeatherViewModel
 import com.sonchan.weathercheck.ui.theme.WeatherCheckTheme
 
@@ -35,6 +37,7 @@ fun WeatherScreenRoute(
     val weatherInfo by viewModel.weatherInfo.collectAsState()
     val today by viewModel.today.collectAsState()
     val context = LocalContext.current
+    val nearestWeather = viewModel.getNearestWeatherItem()
 
     val hourlyWeatherList = weatherInfo?.temps?.get(today)?.mapNotNull { (time, temp) ->
         val pop = weatherInfo!!.precipitation[today]?.get(time)
@@ -47,13 +50,15 @@ fun WeatherScreenRoute(
 
     WeatherScreen(
         weatherInfo = weatherInfo,
+        today = today,
         onNotificationClick = {viewModel.getNotification(
             context = context,
             icon = R.drawable.ic_launcher_foreground,
             title = "WeatherCheck",
             text = "최고 기온: ${weatherInfo!!.maxTemp}°C, 최저 기온: ${weatherInfo!!.minTemp}°C"
         )},
-        todayWeatherDataList = hourlyWeatherList
+        todayWeatherDataList = hourlyWeatherList,
+        nearestWeather = nearestWeather
     )
 }
 
@@ -61,8 +66,10 @@ fun WeatherScreenRoute(
 fun WeatherScreen(
     modifier: Modifier = Modifier,
     weatherInfo: WeatherInfo?,
+    today: String,
     onNotificationClick: () -> Unit,
-    todayWeatherDataList: List<TodayWeatherItem>
+    todayWeatherDataList: List<TodayWeatherItem>,
+    nearestWeather: TodayWeatherItem?
 ){
     Column(
         modifier
@@ -70,13 +77,15 @@ fun WeatherScreen(
             .background(MaterialTheme.colorScheme.background),
     ) {
         if (weatherInfo != null) {
-            Text(
-                text = "최고 기온: ${weatherInfo!!.maxTemp}°C",
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = "최저 기온: ${weatherInfo!!.minTemp}°C",
-                color = MaterialTheme.colorScheme.primary
+            WeatherSummaryCard(
+                date = today,
+                temp = nearestWeather!!.temp,
+                pop = nearestWeather.pop,
+                skyIcon = nearestWeather.sky.icon,
+                skyDescription = nearestWeather.sky.description,
+                maxTemp = weatherInfo.maxTemp[today] ?: 0,
+                minTemp = weatherInfo.minTemp[today] ?: 0,
+                humidity = nearestWeather.humidity
             )
             Text(
                 text = "오늘의 날씨",
@@ -116,9 +125,32 @@ fun WeatherScreen(
 fun WeatherScreenPreview(){
     WeatherCheckTheme {
         WeatherScreen(
-            weatherInfo = null,
+            weatherInfo = WeatherInfo(
+                temps = mapOf("20250430" to mapOf("0200" to 15)),
+                maxTemp = mapOf("20250430" to 20),
+                minTemp = mapOf("20250430" to 10),
+                precipitation = mapOf("20250430" to mapOf("0200" to 10)),
+                sky = mapOf("20250430" to mapOf("0200" to SkyInfo("맑음", R.drawable.sunny_icon))),
+                humidity = mapOf("20250430" to mapOf("0200" to 50))
+            ),
+            today = "20250430",
             onNotificationClick = {},
-            todayWeatherDataList = emptyList()
+            todayWeatherDataList = listOf(
+                TodayWeatherItem(
+                    time = "0200",
+                    temp = 15,
+                    pop = 10,
+                    sky = SkyInfo("맑음", R.drawable.sunny_icon),
+                    humidity = 50,
+                )
+            ),
+            nearestWeather = TodayWeatherItem(
+                time = "0200",
+                temp = 0,
+                pop = 0,
+                sky = SkyInfo("맑음", R.drawable.sunny_icon),
+                humidity = 0,
+            ),
         )
     }
 }
