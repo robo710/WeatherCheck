@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -87,25 +88,31 @@ fun WeatherScreen(
                 minTemp = weatherInfo.minTemp[today] ?: 0,
                 humidity = nearestWeather.humidity
             )
-            Text(
-                text = "오늘의 날씨",
-                color = MaterialTheme.colorScheme.primary
-            )
-            LazyRow(
-                modifier
-                    .fillMaxWidth(),
-                contentPadding = PaddingValues(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
             ) {
-                items(todayWeatherDataList) { item ->
-                    TodayWeatherListItem(
-                        time = item.time,
-                        temp = item.temp,
-                        pop = item.pop,
-                        skyIcon = item.sky.icon,
-                        skyDescription = item.sky.description,
-                        humidity = item.humidity
-                    )
+                Text(
+                    text = "오늘의 날씨",
+                    color = MaterialTheme.colorScheme.primary
+                )
+                LazyRow(
+                    modifier
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    items(todayWeatherDataList) { item ->
+                        TodayWeatherListItem(
+                            time = item.time,
+                            temp = item.temp,
+                            pop = item.pop,
+                            skyIcon = item.sky.icon,
+                            skyDescription = item.sky.description,
+                            humidity = item.humidity
+                        )
+                    }
                 }
             }
             Button(
