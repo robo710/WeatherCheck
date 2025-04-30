@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -22,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sonchan.weathercheck.R
+import com.sonchan.weathercheck.domain.model.TodayWeatherItem
 import com.sonchan.weathercheck.domain.model.WeatherInfo
 import com.sonchan.weathercheck.presentation.component.preview.DarkThemeDevicePreviews
 import com.sonchan.weathercheck.presentation.component.preview.DevicePreviews
@@ -39,7 +39,10 @@ fun WeatherScreenRoute(
 
     val hourlyWeatherList = weatherInfo?.temps?.get(today)?.mapNotNull { (time, temp) ->
         val pop = weatherInfo!!.precipitation[today]?.get(time)
-        if (pop != null) Triple(time, temp, pop) else null
+        val sky = weatherInfo!!.sky[today]?.get(time)
+        if (pop != null && sky != null) {
+            TodayWeatherItem(time, temp, pop, sky)
+        } else null
     } ?: emptyList()
 
     WeatherScreen(
@@ -59,7 +62,7 @@ fun WeatherScreen(
     modifier: Modifier = Modifier,
     weatherInfo: WeatherInfo?,
     onNotificationClick: () -> Unit,
-    todayWeatherDataList: List<Triple<String, Int, Int>>
+    todayWeatherDataList: List<TodayWeatherItem>
 ){
     Column(
         modifier
@@ -91,11 +94,13 @@ fun WeatherScreen(
                     contentPadding = PaddingValues(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(todayWeatherDataList) { (time, temp, pop) ->
+                    items(todayWeatherDataList) { item ->
                         TodayWeatherList(
-                            time = time,
-                            temp = temp,
-                            pop = pop,
+                            time = item.time,
+                            temp = item.temp,
+                            pop = item.pop,
+                            skyIcon = item.sky.icon,
+                            skyDescription = item.sky.description,
                         )
                     }
                 }
