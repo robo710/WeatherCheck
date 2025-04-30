@@ -34,17 +34,17 @@ fun TodayWeatherList(
         Text(
             text = "${time.substring(0,2)}시",
             color = MaterialTheme.colorScheme.primary,
-            fontSize = 20.sp
+            fontSize = 17.sp
         )
         Text(
             text = "$temp°",
             color = MaterialTheme.colorScheme.primary,
-            fontSize = 35.sp
+            fontSize = 25.sp
         )
         Text(
             text = "$pop%",
             color = MaterialTheme.colorScheme.primary,
-            fontSize = 17.sp
+            fontSize = 12.sp
         )
     }
 }
