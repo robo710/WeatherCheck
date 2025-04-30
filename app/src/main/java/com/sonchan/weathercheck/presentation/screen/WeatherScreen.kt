@@ -88,7 +88,7 @@ fun WeatherScreen(
                 LazyRow(
                     modifier
                         .fillMaxWidth(),
-                    contentPadding = PaddingValues(16.dp),
+                    contentPadding = PaddingValues(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items(todayWeatherDataList) { (time, temp, pop) ->
