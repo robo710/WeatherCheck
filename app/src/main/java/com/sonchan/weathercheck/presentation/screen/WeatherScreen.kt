@@ -55,7 +55,7 @@ fun WeatherScreenRoute(
             context = context,
             icon = R.drawable.ic_launcher_foreground,
             title = "WeatherCheck",
-            text = "최고 기온: ${weatherInfo!!.maxTemp}°C, 최저 기온: ${weatherInfo!!.minTemp}°C"
+            text = "최고 기온: ${weatherInfo!!.maxTemp[today]}°C, 최저 기온: ${weatherInfo!!.minTemp[today]}°C"
         )},
         todayWeatherDataList = hourlyWeatherList,
         nearestWeather = nearestWeather
