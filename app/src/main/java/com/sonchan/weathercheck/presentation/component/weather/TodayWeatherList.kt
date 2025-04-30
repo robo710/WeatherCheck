@@ -43,7 +43,7 @@ fun TodayWeatherList(
         )
         Icon(
             painter = painterResource(id = skyIcon),
-            tint = MaterialTheme.colorScheme.onBackground,
+            tint = MaterialTheme.colorScheme.primary,
             contentDescription = skyDescription,
             modifier = modifier
         )
