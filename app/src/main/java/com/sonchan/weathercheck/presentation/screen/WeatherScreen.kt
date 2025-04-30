@@ -98,15 +98,14 @@ fun WeatherScreen(
                     )
                 }
             }
+            Button(
+                onClick = {
+                    onNotificationClick()
+                }
+            ){}
         } else {
             CircularProgressIndicator()
         }
-        Button(
-            onClick = {
-                onNotificationClick()
-            }
-        ){}
-
     }
 }
 
