@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sonchan.weathercheck.R
 import com.sonchan.weathercheck.domain.model.SkyInfo
@@ -92,6 +93,7 @@ fun WeatherScreen(
                 modifier = modifier
                     .padding(horizontal = 24.dp),
                 text = "오늘의 날씨",
+                fontSize = 24.sp,
                 color = MaterialTheme.colorScheme.primary
             )
             LazyRow(
