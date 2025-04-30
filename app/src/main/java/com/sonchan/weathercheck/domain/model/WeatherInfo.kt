@@ -7,8 +7,3 @@ data class WeatherInfo(
     val precipitation: Map<String, Map<String, Int>>,
     val sky: Map<String, Map<String, SkyInfo>>,
 )
-
-data class SkyInfo(
-    val description: String,
-    val icon: Int
-)
