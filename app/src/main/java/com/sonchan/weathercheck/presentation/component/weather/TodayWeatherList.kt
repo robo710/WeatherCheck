@@ -2,6 +2,8 @@ package com.sonchan.weathercheck.presentation.component.weather
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,16 +43,19 @@ fun TodayWeatherList(
             color = MaterialTheme.colorScheme.primary,
             fontSize = 17.sp
         )
+        Spacer(modifier.height(10.dp))
         Icon(
             painter = painterResource(id = skyIcon),
             tint = MaterialTheme.colorScheme.primary,
             contentDescription = skyDescription,
             modifier = modifier
+                .size(48.dp)
         )
+        Spacer(modifier.height(10.dp))
         Text(
-            text = "$temp°",
+            text = "$temp°C",
             color = MaterialTheme.colorScheme.primary,
-            fontSize = 25.sp
+            fontSize = 20.sp
         )
         Text(
             text = "$pop%",
