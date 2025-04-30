@@ -5,14 +5,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sonchan.weathercheck.R
 import com.sonchan.weathercheck.presentation.component.preview.DarkThemeDevicePreviews
 import com.sonchan.weathercheck.presentation.component.preview.DevicePreviews
 import com.sonchan.weathercheck.ui.theme.WeatherCheckTheme
@@ -22,7 +25,9 @@ fun TodayWeatherList(
     modifier: Modifier = Modifier,
     time: String,
     temp: Int,
-    pop: Int
+    pop: Int,
+    skyIcon: Int,
+    skyDescription: String,
 ){
     Column(
         modifier
@@ -35,6 +40,12 @@ fun TodayWeatherList(
             text = "${time.substring(0,2)}시",
             color = MaterialTheme.colorScheme.primary,
             fontSize = 17.sp
+        )
+        Icon(
+            painter = painterResource(id = skyIcon),
+            tint = MaterialTheme.colorScheme.onBackground,
+            contentDescription = skyDescription,
+            modifier = modifier
         )
         Text(
             text = "$temp°",
@@ -57,7 +68,9 @@ fun TodayWeatherListPreview(){
         TodayWeatherList(
             time = "0200",
             temp = 0,
-            pop = 0
+            pop = 0,
+            skyIcon = R.drawable.sunny_icon,
+            skyDescription = "맑음"
         )
     }
 }

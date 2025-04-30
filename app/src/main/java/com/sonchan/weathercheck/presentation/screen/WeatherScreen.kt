@@ -95,7 +95,7 @@ fun WeatherScreen(
                         TodayWeatherList(
                             time = time,
                             temp = temp,
-                            pop = pop
+                            pop = pop,
                         )
                     }
                 }
