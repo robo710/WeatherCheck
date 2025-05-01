@@ -4,6 +4,8 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
@@ -119,7 +121,30 @@ class WeatherViewModel @Inject constructor(
 
     private fun scheduleDailyNotification(context: Context, hour: Int, minute: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver::class.java)
+
+        // Android 12 이상에서 권한 체크
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (!alarmManager.canScheduleExactAlarms()) {
+                val intent = Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    data = Uri.parse("package:${context.packageName}")
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+                return
+            }
+        }
+
+        val todayKey = _today.value
+        val maxTemp = _weatherInfo.value?.maxTemp?.get(todayKey)
+        val minTemp = _weatherInfo.value?.minTemp?.get(todayKey)
+
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("maxTemp", maxTemp ?: 0)
+            putExtra("minTemp", minTemp ?: 0)
+            putExtra("hour", hour)
+            putExtra("minute", minute)
+        }
+
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             0,
@@ -127,7 +152,6 @@ class WeatherViewModel @Inject constructor(
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        // 시간 설정
         val calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, hour)
@@ -135,18 +159,25 @@ class WeatherViewModel @Inject constructor(
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
 
-            // 이미 지난 시간이라면 다음 날로 설정
             if (before(Calendar.getInstance())) {
                 add(Calendar.DATE, 1)
             }
         }
 
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+        } else {
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                pendingIntent
+            )
+        }
     }
+
 
 }
