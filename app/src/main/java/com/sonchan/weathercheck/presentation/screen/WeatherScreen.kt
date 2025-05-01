@@ -27,6 +27,7 @@ import com.sonchan.weathercheck.domain.model.TodayWeatherItem
 import com.sonchan.weathercheck.domain.model.WeatherInfo
 import com.sonchan.weathercheck.presentation.component.preview.DarkThemeDevicePreviews
 import com.sonchan.weathercheck.presentation.component.preview.DevicePreviews
+import com.sonchan.weathercheck.presentation.component.setting.AlarmTimePickerButton
 import com.sonchan.weathercheck.presentation.component.weather.TodayWeatherListItem
 import com.sonchan.weathercheck.presentation.component.weather.WeatherSummaryCard
 import com.sonchan.weathercheck.presentation.viewmodel.WeatherViewModel
@@ -40,6 +41,8 @@ fun WeatherScreenRoute(
     val today by viewModel.today.collectAsState()
     val context = LocalContext.current
     val nearestWeather = viewModel.getNearestWeatherItem()
+    val alarmHour by viewModel.alartHour.collectAsState()
+    val alarmMinute by viewModel.alartMinute.collectAsState()
 
     val hourlyWeatherList = weatherInfo?.temps?.get(today)?.mapNotNull { (time, temp) ->
         val pop = weatherInfo!!.precipitation[today]?.get(time)
@@ -61,7 +64,11 @@ fun WeatherScreenRoute(
         )},
         todayWeatherDataList = hourlyWeatherList,
         nearestWeather = nearestWeather,
-        onSaveAlarmTimeClick = { viewModel.saveAlarmTime(hour = 5, minute = 30) },
+        alarmHour = alarmHour,
+        alarmMinute = alarmMinute,
+        onSaveAlarmTimeClick = { hour, minute ->
+            viewModel.saveAlarmTime(hour = hour, minute = minute)
+        },
     )
 }
 
@@ -73,7 +80,9 @@ fun WeatherScreen(
     onNotificationClick: () -> Unit,
     todayWeatherDataList: List<TodayWeatherItem>,
     nearestWeather: TodayWeatherItem?,
-    onSaveAlarmTimeClick: () -> Unit,
+    alarmHour: Int,
+    alarmMinute: Int,
+    onSaveAlarmTimeClick: (hour: Int, minute: Int) -> Unit,
 ){
     Column(
         modifier
@@ -123,12 +132,14 @@ fun WeatherScreen(
             ){
                 Text(text = "알림")
             }
-            Button(
-                onClick = {
-                    onSaveAlarmTimeClick()
-                }
-            ){
-                Text(text = "시간설정")
+            Column {
+                Text(text = "현재 알림 시간: %02d:%02d".format(alarmHour, alarmMinute))
+
+                AlarmTimePickerButton(
+                    onTimeSelected = { selectedHour, selectedMinute ->
+                       onSaveAlarmTimeClick(selectedHour, selectedMinute)
+                    }
+                )
             }
         } else {
             CircularProgressIndicator()
@@ -168,7 +179,9 @@ fun WeatherScreenPreview(){
                 sky = SkyInfo("맑음", R.drawable.sunny_icon),
                 humidity = 0,
             ),
-            onSaveAlarmTimeClick = {},
+            onSaveAlarmTimeClick = {_, _ ->},
+            alarmHour = 0,
+            alarmMinute = 0,
         )
     }
 }

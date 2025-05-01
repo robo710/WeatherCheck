@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 
 @Composable
-fun TimePickerDialog(
+fun AlarmTimePickerButton(
     onTimeSelected: (hour: Int, minute: Int) -> Unit
 ){
     val context = LocalContext.current
