@@ -17,17 +17,17 @@ class NotificationRepositoryImpl @Inject constructor(
 ): NotificationRepository{
     override fun showNotification(context: Context, icon: Int, title: String, text: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelId = "your_channel_id"
-            val channelName = "Your Channel Name"
+            val channelId = "weather_check_channel"
+            val channelName = "weather_check"
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(channelId, channelName, importance).apply {
-                description = "Your Channel Description"
+                description = "weather_check"
             }
             val notificationManager: NotificationManager = context.getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
         }
 
-        val builder = NotificationCompat.Builder(context, "your_channel_id")
+        val builder = NotificationCompat.Builder(context, "weather_check_channel")
             .setSmallIcon(icon)
             .setContentTitle(title)
             .setContentText(text)
