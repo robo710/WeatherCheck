@@ -1,5 +1,7 @@
 package com.sonchan.weathercheck.data.di
 
+import android.content.Context
+import com.sonchan.weathercheck.data.preference.AlarmPreference
 import com.sonchan.weathercheck.data.remote.api.WeatherApi
 import com.sonchan.weathercheck.data.repository.NotificationRepositoryImpl
 import com.sonchan.weathercheck.data.repository.WeatherRepositoryImpl
@@ -8,6 +10,7 @@ import com.sonchan.weathercheck.domain.repository.WeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -53,5 +56,11 @@ object NetworkModule {
     @Singleton
     fun provideNotificationRepository(): NotificationRepository{
         return NotificationRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAlarmPreference(@ApplicationContext context: Context): AlarmPreference {
+        return AlarmPreference(context)
     }
 }
