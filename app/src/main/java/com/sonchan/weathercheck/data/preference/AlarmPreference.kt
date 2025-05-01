@@ -1,6 +1,7 @@
 package com.sonchan.weathercheck.data.preference
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -18,6 +19,7 @@ class AlarmPreference(private val context: Context) {
     val alarmMinute: Flow<Int> = context.alarmDataStore.data.map { it[MINUTE_KEY] ?: 0 }
 
     suspend fun saveAlarmTime(hour: Int, minute: Int) {
+        Log.d("로그", "Saving hour=$hour, minute=$minute")
         context.alarmDataStore.edit { preferences ->
             preferences[HOUR_KEY] = hour
             preferences[MINUTE_KEY] = minute

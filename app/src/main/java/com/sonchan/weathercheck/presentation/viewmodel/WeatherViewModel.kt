@@ -1,10 +1,15 @@
 package com.sonchan.weathercheck.presentation.viewmodel
 
 import android.content.Context
+import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sonchan.weathercheck.data.preference.AlarmPreference
 import com.sonchan.weathercheck.domain.model.TodayWeatherItem
 import com.sonchan.weathercheck.domain.model.WeatherInfo
+import com.sonchan.weathercheck.domain.repository.AlarmRepository
 import com.sonchan.weathercheck.domain.usecase.GetTodayDateUseCase
 import com.sonchan.weathercheck.domain.usecase.GetTodayWeatherUseCase
 import com.sonchan.weathercheck.domain.usecase.NotificationUseCase
@@ -22,12 +27,17 @@ class WeatherViewModel @Inject constructor(
     private val getTodayWeatherUseCase: GetTodayWeatherUseCase,
     private val notificationUseCase: NotificationUseCase,
     private val getTodayDateUseCase: GetTodayDateUseCase,
+    private val alarmRepository: AlarmRepository,
 ): ViewModel(){
     private val _weatherInfo = MutableStateFlow<WeatherInfo?>(null)
     private val _today = MutableStateFlow<String>("")
+    private val _alartHour = MutableStateFlow<Int>(8)
+    private val _alartMinute = MutableStateFlow<Int>(0)
 
     val weatherInfo: StateFlow<WeatherInfo?> = _weatherInfo
     val today: StateFlow<String> = _today
+    val alartHour: StateFlow<Int> = _alartHour
+    val alartMinute: StateFlow<Int> = _alartMinute
 
     init {
         _today.value = getTodayDateUseCase()
@@ -37,6 +47,21 @@ class WeatherViewModel @Inject constructor(
             nx = 57,
             ny = 74
         )
+        viewModelScope.launch {
+            alarmRepository.getAlarmHour().collect {
+                _alartHour.value = it
+            }
+        }
+        viewModelScope.launch {
+            alarmRepository.getAlarmMinute().collect {
+                _alartMinute.value = it
+            }
+        }
+        Log.d("로그", "_alartHour - ${_alartHour.value}")
+        Log.d("로그", "_alartMinute - ${_alartMinute.value}")
+        saveAlarmTime(4, 30)
+        Log.d("로그", "_alartHour - ${_alartHour.value}")
+        Log.d("로그", "_alartMinute - ${_alartMinute.value}")
     }
 
     private fun getWeatherInfo(
@@ -77,6 +102,12 @@ class WeatherViewModel @Inject constructor(
         val currentTime = SimpleDateFormat("HHmm", Locale.getDefault()).format(Date())
         return items.minByOrNull {
             kotlin.math.abs(it.time.toInt() - currentTime.toInt())
+        }
+    }
+
+    fun saveAlarmTime(hour: Int, minute: Int) {
+        viewModelScope.launch {
+            alarmRepository.saveAlarmTime(hour, minute)
         }
     }
 }
