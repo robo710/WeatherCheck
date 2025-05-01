@@ -37,13 +37,13 @@ class WeatherViewModel @Inject constructor(
 ): ViewModel(){
     private val _weatherInfo = MutableStateFlow<WeatherInfo?>(null)
     private val _today = MutableStateFlow<String>("")
-    private val _alartHour = MutableStateFlow<Int>(8)
-    private val _alartMinute = MutableStateFlow<Int>(0)
+    private val _alarmHour = MutableStateFlow<Int>(8)
+    private val _alarmMinute = MutableStateFlow<Int>(0)
 
     val weatherInfo: StateFlow<WeatherInfo?> = _weatherInfo
     val today: StateFlow<String> = _today
-    val alartHour: StateFlow<Int> = _alartHour
-    val alartMinute: StateFlow<Int> = _alartMinute
+    val alarmHour: StateFlow<Int> = _alarmHour
+    val alarmMinute: StateFlow<Int> = _alarmMinute
 
     init {
         _today.value = getTodayDateUseCase()
@@ -55,12 +55,12 @@ class WeatherViewModel @Inject constructor(
         )
         viewModelScope.launch {
             alarmRepository.getAlarmHour().collect {
-                _alartHour.value = it
+                _alarmHour.value = it
             }
         }
         viewModelScope.launch {
             alarmRepository.getAlarmMinute().collect {
-                _alartMinute.value = it
+                _alarmMinute.value = it
             }
         }
     }
@@ -106,17 +106,18 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun saveAlarmTime(hour: Int, minute: Int) {
+    fun saveAlarmTime(hour: Int, minute: Int, context: Context) {
         viewModelScope.launch {
             alarmRepository.saveAlarmTime(hour, minute)
-            _alartHour.value = hour
-            _alartMinute.value = minute
+            _alarmHour.value = hour
+            _alarmMinute.value = minute
+            scheduleDailyNotification(context, hour, minute)
         }
-        Log.d("로그", "Updated _alartHour - ${_alartHour.value}")
-        Log.d("로그", "Updated _alartMinute - ${_alartMinute.value}")
+        Log.d("로그", "Updated _alartHour - ${_alarmHour.value}")
+        Log.d("로그", "Updated _alartMinute - ${_alarmMinute.value}")
     }
 
-    fun scheduleDailyNotification(context: Context, hour: Int, minute: Int) {
+    private fun scheduleDailyNotification(context: Context, hour: Int, minute: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(

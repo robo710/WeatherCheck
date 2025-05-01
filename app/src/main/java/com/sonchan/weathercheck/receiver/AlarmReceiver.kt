@@ -18,7 +18,7 @@ class AlarmReceiver : BroadcastReceiver() {
             val channel = NotificationChannel(
                 channelId,
                 "날씨 알림",
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             )
             notificationManager.createNotificationChannel(channel)
         }
@@ -27,7 +27,7 @@ class AlarmReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("WeatherCheck")
             .setContentText("오늘의 날씨를 확인하세요!")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
         notificationManager.notify(1, notification)

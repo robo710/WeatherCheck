@@ -41,8 +41,8 @@ fun WeatherScreenRoute(
     val today by viewModel.today.collectAsState()
     val context = LocalContext.current
     val nearestWeather = viewModel.getNearestWeatherItem()
-    val alarmHour by viewModel.alartHour.collectAsState()
-    val alarmMinute by viewModel.alartMinute.collectAsState()
+    val alarmHour by viewModel.alarmHour.collectAsState()
+    val alarmMinute by viewModel.alarmMinute.collectAsState()
 
     val hourlyWeatherList = weatherInfo?.temps?.get(today)?.mapNotNull { (time, temp) ->
         val pop = weatherInfo!!.precipitation[today]?.get(time)
@@ -67,7 +67,7 @@ fun WeatherScreenRoute(
         alarmHour = alarmHour,
         alarmMinute = alarmMinute,
         onSaveAlarmTimeClick = { hour, minute ->
-            viewModel.saveAlarmTime(hour = hour, minute = minute)
+            viewModel.saveAlarmTime(hour = hour, minute = minute, context = context)
         },
     )
 }
