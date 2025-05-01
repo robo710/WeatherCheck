@@ -57,10 +57,4 @@ object NetworkModule {
     fun provideNotificationRepository(): NotificationRepository{
         return NotificationRepositoryImpl()
     }
-
-    @Provides
-    @Singleton
-    fun provideAlarmPreference(@ApplicationContext context: Context): AlarmPreference {
-        return AlarmPreference(context)
-    }
 }
