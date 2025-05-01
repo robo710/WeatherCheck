@@ -84,6 +84,9 @@ dependencies {
     // OkHttp Logging Interceptor (디버깅용)
     implementation(libs.logging.interceptor)
 
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+
 }
 
 fun getApiKey(propertyKey: String): String {
