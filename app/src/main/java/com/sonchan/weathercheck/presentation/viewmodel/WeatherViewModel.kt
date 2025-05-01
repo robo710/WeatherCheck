@@ -1,6 +1,9 @@
 package com.sonchan.weathercheck.presentation.viewmodel
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
@@ -13,12 +16,14 @@ import com.sonchan.weathercheck.domain.repository.AlarmRepository
 import com.sonchan.weathercheck.domain.usecase.GetTodayDateUseCase
 import com.sonchan.weathercheck.domain.usecase.GetTodayWeatherUseCase
 import com.sonchan.weathercheck.domain.usecase.NotificationUseCase
+import com.sonchan.weathercheck.receiver.AlarmReceiver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
@@ -110,4 +115,37 @@ class WeatherViewModel @Inject constructor(
         Log.d("로그", "Updated _alartHour - ${_alartHour.value}")
         Log.d("로그", "Updated _alartMinute - ${_alartMinute.value}")
     }
+
+    fun scheduleDailyNotification(context: Context, hour: Int, minute: Int) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        // 시간 설정
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+
+            // 이미 지난 시간이라면 다음 날로 설정
+            if (before(Calendar.getInstance())) {
+                add(Calendar.DATE, 1)
+            }
+        }
+
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
 }
