@@ -14,6 +14,7 @@ import com.sonchan.weathercheck.domain.usecase.GetTodayDateUseCase
 import com.sonchan.weathercheck.domain.usecase.GetTodayWeatherUseCase
 import com.sonchan.weathercheck.domain.usecase.NotificationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -57,11 +58,6 @@ class WeatherViewModel @Inject constructor(
                 _alartMinute.value = it
             }
         }
-        Log.d("로그", "_alartHour - ${_alartHour.value}")
-        Log.d("로그", "_alartMinute - ${_alartMinute.value}")
-        saveAlarmTime(4, 30)
-        Log.d("로그", "_alartHour - ${_alartHour.value}")
-        Log.d("로그", "_alartMinute - ${_alartMinute.value}")
     }
 
     private fun getWeatherInfo(
@@ -108,6 +104,10 @@ class WeatherViewModel @Inject constructor(
     fun saveAlarmTime(hour: Int, minute: Int) {
         viewModelScope.launch {
             alarmRepository.saveAlarmTime(hour, minute)
+            _alartHour.value = hour
+            _alartMinute.value = minute
         }
+        Log.d("로그", "Updated _alartHour - ${_alartHour.value}")
+        Log.d("로그", "Updated _alartMinute - ${_alartMinute.value}")
     }
 }
