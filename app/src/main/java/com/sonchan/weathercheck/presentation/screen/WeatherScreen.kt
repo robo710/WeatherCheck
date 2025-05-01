@@ -133,7 +133,10 @@ fun WeatherScreen(
                 Text(text = "알림")
             }
             Column {
-                Text(text = "현재 알림 시간: %02d:%02d".format(alarmHour, alarmMinute))
+                Text(
+                    text = "현재 알림 시간: %02d:%02d".format(alarmHour, alarmMinute),
+                    color = MaterialTheme.colorScheme.primary
+                )
 
                 AlarmTimePickerButton(
                     onTimeSelected = { selectedHour, selectedMinute ->
