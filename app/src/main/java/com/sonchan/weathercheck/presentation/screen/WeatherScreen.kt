@@ -60,7 +60,8 @@ fun WeatherScreenRoute(
             text = "최고 기온: ${weatherInfo!!.maxTemp[today]}°C, 최저 기온: ${weatherInfo!!.minTemp[today]}°C"
         )},
         todayWeatherDataList = hourlyWeatherList,
-        nearestWeather = nearestWeather
+        nearestWeather = nearestWeather,
+        onSaveAlarmTimeClick = { viewModel.saveAlarmTime(hour = 5, minute = 30) },
     )
 }
 
@@ -71,7 +72,8 @@ fun WeatherScreen(
     today: String,
     onNotificationClick: () -> Unit,
     todayWeatherDataList: List<TodayWeatherItem>,
-    nearestWeather: TodayWeatherItem?
+    nearestWeather: TodayWeatherItem?,
+    onSaveAlarmTimeClick: () -> Unit,
 ){
     Column(
         modifier
@@ -118,7 +120,16 @@ fun WeatherScreen(
                 onClick = {
                     onNotificationClick()
                 }
-            ){}
+            ){
+                Text(text = "알림")
+            }
+            Button(
+                onClick = {
+                    onSaveAlarmTimeClick()
+                }
+            ){
+                Text(text = "시간설정")
+            }
         } else {
             CircularProgressIndicator()
         }
@@ -157,6 +168,7 @@ fun WeatherScreenPreview(){
                 sky = SkyInfo("맑음", R.drawable.sunny_icon),
                 humidity = 0,
             ),
+            onSaveAlarmTimeClick = {},
         )
     }
 }
