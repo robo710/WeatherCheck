@@ -9,7 +9,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.sonchan.weathercheck.presentation.screen.WeatherScreen
 import com.sonchan.weathercheck.presentation.screen.WeatherScreenRoute
 import com.sonchan.weathercheck.ui.theme.WeatherCheckTheme
 import dagger.hilt.android.AndroidEntryPoint
