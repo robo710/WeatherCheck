@@ -35,7 +35,7 @@ object NetworkModule {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
             .addConverterFactory(GsonConverterFactory.create())
-            .client(client) // 추가!!
+            .client(client)
             .build()
         return retrofit
     }
