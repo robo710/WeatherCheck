@@ -10,57 +10,27 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
+import androidx.work.WorkManager
 import com.sonchan.weathercheck.R
+import com.sonchan.weathercheck.worker.WeatherWorker
 import java.util.Calendar
 
+// AlarmReceiver.kt
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-        val maxTemp = intent?.getIntExtra("maxTemp", -1)
-        val minTemp = intent?.getIntExtra("minTemp", -1)
-        val hour = intent?.getIntExtra("hour", 8) ?: 8
-        val minute = intent?.getIntExtra("minute", 0) ?: 0
-
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channelId = "weather_check_channel"
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "날씨 알림",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val contentText = if (maxTemp != -1 && minTemp != -1) {
-            "최고 기온: ${maxTemp}°C, 최저 기온: ${minTemp}°C"
-        } else {
-            "오늘의 날씨를 확인하세요!"
-        }
-
-        val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("WeatherCheck")
-            .setContentText(contentText)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+        // WorkManager로 작업 예약
+        val workRequest = OneTimeWorkRequestBuilder<WeatherWorker>()
+            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
             .build()
 
-        notificationManager.notify(1, notification)
+        WorkManager.getInstance(context).enqueue(workRequest)
 
-        // 다음 날 알람 재등록
+        // 다음 날 알람 예약 유지
+        val hour = intent?.getIntExtra("hour", 8) ?: 8
+        val minute = intent?.getIntExtra("minute", 0) ?: 0
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        // Android 12 이상에서 정확한 알람 권한 확인
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!alarmManager.canScheduleExactAlarms()) {
-                val intent = Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                    data = Uri.parse("package:" + context.packageName)
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context.startActivity(intent)
-                return
-            }
-        }
 
         val calendar = Calendar.getInstance().apply {
             add(Calendar.DATE, 1)
@@ -71,8 +41,6 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         val newIntent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("maxTemp", maxTemp ?: 0)
-            putExtra("minTemp", minTemp ?: 0)
             putExtra("hour", hour)
             putExtra("minute", minute)
         }
