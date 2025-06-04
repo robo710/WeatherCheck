@@ -51,4 +51,6 @@ WeatherCheck/
 ```
 
 ## 📸 스크린샷
-![Screenshot_20250604_133442_WeatherCheck](https://github.com/user-attachments/assets/b59fb407-9dfd-4e32-907a-a48f1586ee7f) ![Screenshot_20250604_133450_WeatherCheck](https://github.com/user-attachments/assets/e54d979e-cad0-49a4-ba2a-5ad7e1e15d41)
+| 기본 화면 | 알림 |
+|-----------|-------------|
+|![Screenshot_20250604_133442_WeatherCheck](https://github.com/user-attachments/assets/b59fb407-9dfd-4e32-907a-a48f1586ee7f) | ![Screenshot_20250604_133450_WeatherCheck](https://github.com/user-attachments/assets/e54d979e-cad0-49a4-ba2a-5ad7e1e15d41)|
